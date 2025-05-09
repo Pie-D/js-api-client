@@ -16,17 +16,16 @@ export const adminGetWithdrawReqById = (withdraw_id) => {
     return axios.get(`/wallet/admin/withdraw/${withdraw_id}`,)
 }
 
-export const adminSetWithdrawStatus = (id, withdrawState, withdrawExp, destNote = null) => {
-    let data = {};
+export const adminSetWithdrawStatus = (id, withdrawState, withdrawExp, destNote=null) => {
+    const params = new URLSearchParams();
 
     if (withdrawState === "accept") {
-        data.destTransactionRef = withdrawExp;
-        data.destNote = destNote;
+        params.append('destTransactionRef', withdrawExp);
+        params.append('destNote', destNote);
     } else {
-        data.reason = withdrawExp;
+        params.append('reason', withdrawExp);
     }
-
-    return axios.post(`/wallet/admin/withdraw/${id}/${withdrawState}`, data, {
-        headers: { 'Content-Type': 'application/json' }
-    });
-};
+    return axios.post(`/wallet/admin/withdraw/${id}/${withdrawState}`, params, {
+        headers: {'Content-Type': "application/x-www-form-urlencoded"},
+    })
+}
